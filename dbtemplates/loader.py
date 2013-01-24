@@ -1,4 +1,4 @@
-from django.contrib.sites.models import Site
+# from django.contrib.sites.models import Site
 from django.db import router
 from django.template import TemplateDoesNotExist
 
@@ -19,10 +19,10 @@ class Loader(BaseLoader):
     """
     is_usable = True
 
-    def load_and_store_template(self, template_name, cache_key, site, **params):
+    def load_and_store_template(self, template_name, cache_key, **params): #, site
         template = Template.objects.get(name__exact=template_name, **params)
         db = router.db_for_read(Template, instance=template)
-        display_name = 'dbtemplates:%s:%s:%s' % (db, template_name, site.domain)
+        display_name = 'dbtemplates:%s:%s:%s' % (db, template_name) #, site.domain
         return set_and_return(cache_key, template.content, display_name)
 
     def load_template_source(self, template_name, template_dirs=None):
@@ -38,7 +38,7 @@ class Loader(BaseLoader):
         # * If all of the above steps have failed we generate a new key
         #   in the cache indicating that queries failed, with the current
         #   timestamp.
-        site = Site.objects.get_current()
+#         site = Site.objects.get_current()
         cache_key = get_cache_key(template_name)
         if cache:
             try:
@@ -61,12 +61,10 @@ class Loader(BaseLoader):
         # Not marked as not-found, move on...
 
         try:
-            return self.load_and_store_template(template_name, cache_key,
-                                                site, sites__in=[site.id])
+            return self.load_and_store_template(template_name, cache_key) #, site, sites__in=[site.id]
         except (Template.MultipleObjectsReturned, Template.DoesNotExist):
             try:
-                return self.load_and_store_template(template_name, cache_key,
-                                                    site, sites__isnull=True)
+                return self.load_and_store_template(template_name, cache_key) #, site, sites__isnull=True
             except (Template.MultipleObjectsReturned, Template.DoesNotExist):
                 pass
 

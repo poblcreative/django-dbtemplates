@@ -88,17 +88,17 @@ class TemplateAdmin(TemplateModelAdmin):
             'fields': ('name', 'content'),
             'classes': ('monospace',),
         }),
-        (_('Advanced'), {
-            'fields': (('sites'),),
-        }),
+#         (_('Advanced'), {
+#             'fields': (('sites'),),
+#         }),
         (_('Date/time'), {
             'fields': (('creation_date', 'last_changed'),),
             'classes': ('collapse',),
         }),
     )
-    filter_horizontal = ('sites',)
-    list_display = ('name', 'creation_date', 'last_changed', 'site_list')
-    list_filter = ('sites',)
+#     filter_horizontal = ('sites',)
+    list_display = ('name', 'creation_date', 'last_changed') #, 'site_list'
+#     list_filter = ('sites',)
     save_as = True
     search_fields = ('name', 'content')
     actions = ['invalidate_cache', 'repopulate_cache', 'check_syntax']
@@ -148,9 +148,9 @@ class TemplateAdmin(TemplateModelAdmin):
                 "Template syntax OK for %(count)d templates.", count)
             self.message_user(request, message % {'count': count})
     check_syntax.short_description = _("Check template syntax")
-
-    def site_list(self, template):
-        return ", ".join([site.name for site in template.sites.all()])
-    site_list.short_description = _('sites')
+    
+#     def site_list(self, template):
+#         return ", ".join([site.name for site in template.sites.all()])
+#     site_list.short_description = _('sites')
 
 admin.site.register(Template, TemplateAdmin)

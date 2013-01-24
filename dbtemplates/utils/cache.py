@@ -1,6 +1,6 @@
 from django.core.cache import get_cache
 
-from django.contrib.sites.models import Site
+# from django.contrib.sites.models import Site
 from django.template.defaultfilters import slugify
 
 from dbtemplates.conf import settings
@@ -13,8 +13,8 @@ cache = get_cache_backend()
 
 
 def get_cache_key(name):
-    current_site = Site.objects.get_current()
-    return 'dbtemplates::%s::%s' % (slugify(name), current_site.pk)
+#     current_site = Site.objects.get_current()
+    return 'dbtemplates::%s' % (slugify(name)) #::%s , current_site.pk
 
 
 def get_cache_notfound_key(name):
